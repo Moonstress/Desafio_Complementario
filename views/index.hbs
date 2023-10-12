@@ -1,13 +1,65 @@
-<h1>Bienvenido {{ name }}</h1>
-<div>
-    <input type="text" id="chatBox">
-</div>
+<!DOCTYPE html>
+<html lang="en">
 
-<div>
-    <p id="messageLogs"></p>
-</div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product CRUD</title>
+</head>
+
+<body>
+    <h1>Product List</h1>
+
+    <!-- Data table -->
+    <table style="border-collapse: collapse; width: 100%;">
+        <thead>
+            <tr>
+                <th style="border: 1px solid #dddddd; text-align: left;">ID</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Title</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Description</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Code</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Price</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Status</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Stock</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Category</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Thumbnails</th>
+                <th style="border: 1px solid #dddddd; text-align: left;">Actions</th>
+            </tr>
+        </thead>
+        <tbody id="data-table-body">
+            <!-- Data rows will be added here dynamically using JavaScript -->
+        </tbody>
+    </table>
+
+    <!-- Find button -->
 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/socket.io/socket.io.js"></script>
-<script src="/js/chat.js"></script>
+    <!-- Form for adding/updating products -->
+    <form id="productForm">
+        <table>
+            <tr>
+                <td><input type="text" id="productId" placeholder="ID"></td>
+                <td><input type="text" id="productTitle" placeholder="Title"></td>
+                <td><input type="text" id="productDescription" placeholder="Description"></td>
+                <td><input type="text" id="productCode" placeholder="Code"></td>
+                <td><input type="text" id="productPrice" placeholder="Price"></td>
+                <td><input type="text" id="productStatus" placeholder="Status"></td>
+                <td><input type="text" id="productStock" placeholder="Stock"></td>
+                <td><input type="text" id="productCategory" placeholder="Category"></td>
+                <td><input type="text" id="productThumbnails" placeholder="Thumbnails"></td>
+            </tr>
+            <tr>
+                
+                    <button type="submit" id="addProduct">Add Product</button>
+                    <button type="submit" id="updateProduct">Update Product</button>
+                    <button type="submit" id="deleteProduct">Delete Product</button>
+                    <button type="button" id="findButton">Find Product</button>
+                
+            </tr>
+        </table>
+    </form>
+
+    <script src="../public/js/products.js"></script>
+</body>
+
+</html>

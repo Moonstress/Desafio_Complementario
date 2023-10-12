@@ -1,49 +1,53 @@
-const socket = io()
-let user
-let chatbok = document.querySelector('#chatBox')
+const socket = io();
+let user;
+let chatBox = document.querySelector('#chatBox');
 
 Swal.fire({
     title: 'Identificate',
-    input:'text',
+    input: 'text',
     text: 'Ingresa un nombre de usuario para identificarte.',
-    inputValidator: value => {
-        return !value && 'Necesitás ingresar un nombre de usuario si o sí.'
+    inputValidator: (value) => {
+        return !value && 'Necesitás ingresar un nombre de usuario si o sí.';
     },
-    allowOutsideClick: false
-}).then( resultado => {
-    user = resultado.value
-    socket.emit('authenticated', user)
-})
+    allowOutsideClick: false,
+}).then((resultado) => {
+    user = resultado.value;
+    console.log(user);
+});
 
-const handleInput = (evt)=>{
-    if(evt.key === 'Enter'){
-        if (chatbok.value.trim().length > 0) {            
-            socket.emit('message', 
-            {user, message: chatbok.value})
-            chatbok.value = ''
+const handleInput = (evt) => {
+    if (evt.key === 'Enter') {
+        if (chatBox.value.trim().length > 0) {
+            // Send the message to the server
+            socket.emit('message', { user, message: chatBox.value });
+            chatBox.value = '';
         }
     }
-}
+};
 
-chatbok.addEventListener('keyup', handleInput)
+chatBox.addEventListener('keyup', handleInput);
 
-socket.on('messageLogs', data => {
-    let logP = document.querySelector('#messageLogs')
-    let messagesText = ''
-    data.forEach(message => {
-        messagesText += `${message.user} dice: ${message.message}<br>`
-    })
-    logP.innerHTML = messagesText
-})
+socket.on('messageLogs', (data) => {
+    let logP = document.querySelector('#messageLogs');
+    let messagesText = '';
+    data.forEach((message) => {
+        messagesText += `${message.user} dice: ${message.message}<br>`;
+    });
+    logP.innerHTML = messagesText;
+});
 
-socket.on('newUserConnected', userName => {
-    if(!userName) return
-    Swal.fire({
-        toast: true,
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 10000,
-        title: `${userName} se a unido al chat`,
-        icon: 'success'
-    })
-})
+// Error handling for Socket.io events
+socket.on('connect_error', (error) => {
+    console.error('Socket.io connection error:', error);
+    // You can inform the user of the connection error here.
+});
+
+socket.on('connect_timeout', () => {
+    console.error('Socket.io connection timeout');
+    // You can inform the user of the connection timeout here.
+});
+
+socket.on('error', (error) => {
+    console.error('Socket.io error:', error);
+    // You can inform the user of a general Socket.io error here.
+});

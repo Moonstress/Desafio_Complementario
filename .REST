@@ -1,3 +1,32 @@
+#List All Users
+###
+GET http://localhost:8080/api/users
+
+#Add New User
+###
+POST  http://localhost:8080/api/users
+Content-Type: application/json
+
+{
+  "first_name": "Sebastian",
+  "last_name": "Rojas",
+  "email": "sebastian.rojas@gmail.com"
+}
+
+# Update User (PUT)
+###
+PUT http://localhost:8080/api/users/6525d239209bb44b6be22ebe
+Content-Type: application/json
+
+{
+  "first_name": "Sebastian",
+  "last_name": "Rojas",
+  "email": "sebastian.rojas.w@gmail.com"
+}
+
+### Delete User
+DELETE http://localhost:8080/api/users/{userId}
+
 # List All Products
 ###
 GET http://localhost:8080/api/products

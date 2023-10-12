@@ -1,48 +1,73 @@
-import express from 'express';
-import ProductManager from '../Dao/productManager.js'
+import { Router } from 'express';
+import Product from '../Dao/models/products.model.js'; 
+const router = Router();
 
-const router = express.Router();
-const productManager = new ProductManager();
-
-router.get('/', (req, res) => {
-  const products = productManager.getProducts();
-  res.json(products);
-});
-
-// Route to get a product by its ID
-router.get('/:pid', (req, res) => {
-  const { pid } = req.params;
-  const product = productManager.getProductById(parseInt(pid, 10));
-
-  if (!product) {
-    res.status(404).json({ error: 'Product not found' });
-  } else {
-    res.json(product);
+// Get all products
+router.get('/', async (req, res) => {
+  try {
+    const products = await Product.find();
+    res.status(200).json({
+      status: 'success',
+      payload: products,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-router.post('/', (req, res) => {
-  const newProduct = req.body;
-  productManager.addProduct(newProduct);
-  res.status(201).json(newProduct);
-});
-
-router.put('/:pid', (req, res) => {
-  const { pid } = req.params;
-  const updatedFields = req.body;
-  const updatedProduct = productManager.updateProduct(parseInt(pid, 10), updatedFields);
-
-  if (!updatedProduct) {
-    res.status(404).json({ error: 'Product not found' });
-  } else {
-    res.json(updatedProduct);
+// Create a new product
+router.post('/', async (req, res) => {
+  try {
+    const newProductData = req.body;
+    const newProduct = new Product(newProductData);
+    const result = await newProduct.save();
+    res.status(201).json({
+      status: 'success',
+      payload: result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
   }
 });
 
-router.delete('/:pid', (req, res) => {
-  const { pid } = req.params;
-  productManager.deleteProduct(parseInt(pid, 10));
-  res.status(204).send();
+// Update a product
+router.put('/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const updatedProductData = req.body;
+    const result = await Product.findByIdAndUpdate(
+      productId,
+      updatedProductData,
+      { new: true }
+    );
+    if (!result) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    res.status(200).json({
+      status: 'success',
+      payload: result,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete a product
+router.delete('/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const result = await Product.findByIdAndRemove(productId);
+    if (!result) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    res.status(204).end();
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 export default router;
