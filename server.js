@@ -42,6 +42,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Set the view engine to Handlebars
+app.engine('hbs', expressHandlebars());
+app.set('view engine', 'hbs');
+
 // Handlebars engine setup for views
 app.engine('handlebars', handlebars.engine());
 app.set('view engine', 'handlebars');
@@ -52,13 +56,17 @@ app.get('/chat', (req, res) => {
   res.render('chat.handlebars.hbs');
 });
 
+app.get('/api/products', (req, res) => {
+  const products = [/* Your product data here */];
+  res.render('products', { products });
+});
+
+
 app.engine('hbs', handlebars.engine({ extname: '.hbs' }));
 app.set('view engine', 'hbs');
 
-
 // API routes
 app.use(routerApp);
-
 
 // Start the HTTP server
 httpServer.listen(config.port, () => {
@@ -66,7 +74,6 @@ httpServer.listen(config.port, () => {
 });
 
 const mensajes = [];
-
 
 // Error handling middleware
 app.use((err, req, res, next) => {

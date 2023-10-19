@@ -1,78 +1,52 @@
-import fs from 'fs';
+import Product from "./models/products.model.js";
 
-class ProductManager {
+class ProductManagerMongo {
   constructor() {
-    this.products = [];
-    this.filePath = './products.json';
-    this.loadProductsFromFile();
+    this.model = Product;
   }
 
-  loadProductsFromFile() {
+  async getProducts() {
     try {
-      if (fs.existsSync(this.filePath)) {
-        const data = fs.readFileSync(this.filePath, 'utf8');
-        this.products = JSON.parse(data);
-        // Calculate the next ID based on existing products
-        this.nextId = Math.max(...this.products.map(product => product.id), 0) + 1;
-      }
+      // Find all products in the database
+      return await this.model.find({});
     } catch (error) {
-      console.error('Error loading products:', error);
+      console.log(error);
     }
   }
 
-  saveProductsToFile() {
+  async getProduct(productId) {
     try {
-      fs.writeFileSync(this.filePath, JSON.stringify(this.products, null, 2), 'utf8');
+      return await this.model.findById(productId);
     } catch (error) {
-      console.error('Error saving products:', error);
+      console.log(error);
     }
   }
 
-  addProduct(product) {
-    // Generate a unique ID for the new product
-    product.id = this.nextId++;
-    this.products.push(product);
-    this.saveProductsToFile();
-  }
-   
-  // Get all products
-  getProducts() {
-    return this.products;
-  }
-
-
-  getProductById(id) {
-    console.log('Searching for product with ID:', id);
-    console.log('Products array:', this.products);
-    
-    return this.products.find(product => product.id === id);
-  }
-  
-
-  updateProduct(id, updatedFields) {
-    const productIndex = this.products.findIndex(product => product.id === id);
-    if (productIndex !== -1) {
-      // Create a copy of the existing product
-      const updatedProduct = { ...this.products[productIndex] };
-      // Merge the updated fields into the copy
-      Object.assign(updatedProduct, updatedFields);
-      // Replace the existing product with the updated product
-      this.products[productIndex] = updatedProduct;
-      this.saveProductsToFile();
-      return updatedProduct;
+  async createProduct(product) {
+    try {
+      return await this.model.create(product);
+    } catch (error) {
+      console.log(error);
     }
-    return null; // Product not found
   }
-  
 
-  // Delete a product by its ID
-  deleteProduct(id) {
-    const index = this.products.findIndex(product => product.id === id);
-    if (index !== -1) {
-      this.products.splice(index, 1);
-      this.saveProductsToFile();
+  async updateProduct(productId, updatedProduct) {
+    try {
+      return await this.model.findByIdAndUpdate(productId, updatedProduct, {
+        new: true, // Return the updated document
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async deleteProduct(productId) {
+    try {
+      return await this.model.findByIdAndRemove(productId);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
 
-export default ProductManager;
+export default ProductManagerMongo;

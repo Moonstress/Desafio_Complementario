@@ -1,14 +1,15 @@
 import { Router } from 'express';
-import { userModel } from '../Dao/models/user.model.js';
+import UserManagerMongo from '../Dao/userManager.js';
 
 const router = Router();
+const userService = new UserManagerMongo();
 
 router.get('/', async (req, res) => {
   try {
-    let users = await userModel.find();
+    const users = await userService.getUsers();
     res.send({
       status: 'success',
-      payload: users,
+      payload: users
     });
   } catch (error) {
     console.log(error);
@@ -17,28 +18,23 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   try {
-    let newUser = req.body;
-      
-    const result = await userModel.create(newUser); // Use newUser object
+    const newUser = req.body;
+    const result = await userService.createUser(newUser);
 
     res.send({
       status: 'success',
-      payload: result,
+      payload: result
     });
   } catch (error) {
     console.log(error);
   }
 });
 
-
 router.put('/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
     const updatedUserData = req.body;
-
-    const result = await userModel.findByIdAndUpdate(userId, updatedUserData, {
-      new: true, // Return the updated document
-    });
+    const result = await userService.updateUser(userId, updatedUserData);
 
     if (!result) {
       return res.status(404).json({ error: 'User not found' });
@@ -46,7 +42,7 @@ router.put('/:userId', async (req, res) => {
 
     res.status(200).json({
       status: 'success',
-      payload: result,
+      payload: result
     });
   } catch (error) {
     console.log(error);
@@ -57,8 +53,7 @@ router.put('/:userId', async (req, res) => {
 router.delete('/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
-
-    const result = await userModel.findByIdAndRemove(userId);
+    const result = await userService.deleteUser(userId);
 
     if (!result) {
       return res.status(404).json({ error: 'User not found' });
@@ -71,5 +66,4 @@ router.delete('/:userId', async (req, res) => {
   }
 });
 
-
-export default router
+export default router;

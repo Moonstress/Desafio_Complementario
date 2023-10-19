@@ -33,7 +33,7 @@ GET http://localhost:8080/api/products
 
 # Get Product by ID (Replace :pid with a valid product ID)
 ###
-GET http://localhost:8080/api/products/:pid
+GET http://localhost:8080/api/products/6525d4289abce8e5441d6b89
 
 # Add New Product
 ###
@@ -65,27 +65,36 @@ Content-Type: application/json
 
 # Delete Product by ID (Replace :pid with a valid product ID)
 ###
-DELETE http://localhost:8080/api/products/:pid
+DELETE http://localhost:8080/api/products/652c3d64a43fd496e2281d6c
 
-# Create New Cart
+# Create a New Cart
 ###
 POST http://localhost:8080/api/carts
 Content-Type: application/json
 
 {
+  "userId": "6525aea01bd18f1ec73d1178",
   "products": []
 }
 
-# List Products in a Cart (Replace :cid with a valid cart ID)
-###
-GET http://localhost:8080/api/carts/1
 
+#Get Cart by ID (Replace :cid with a valid cart ID)
 ###
-# Add Product to Cart (Replace :cid and :pid with valid cart and product IDs)
-POST http://localhost:8080/api/carts/:cid/products/:pid
+GET http://localhost:8080/api/carts/65303b64f28cfdef94e22fad
+
+# Add Item to Cart (Replace :cid with a valid cart ID)
+###
+POST http://localhost:8080/api/carts/65303b64f28cfdef94e22fad/products
 Content-Type: application/json
 
 {
+  "productId": "6525d4289abce8e5441d6b89",
   "quantity": 2
 }
+
+
+
+#Remove Item from Cart (Replace :cid and :pid with valid cart and product IDs)
+###
+DELETE http://localhost:8080/api/carts/:cid/products/:pid
 
