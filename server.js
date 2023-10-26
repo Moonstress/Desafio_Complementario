@@ -3,14 +3,11 @@ import http from 'http';
 import { Server as IOServer } from 'socket.io';
 import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
-import { MongoClient } from 'mongodb';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
-import { connectDb } from './src/config/config.js'; 
-import routerApp from "./src/routes/index.js"
-
-
+import { connectDb } from './src/config/config.js';
+import routerApp from "./src/routes/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -42,28 +39,15 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Set the view engine to Handlebars
-app.engine('hbs', expressHandlebars());
-app.set('view engine', 'hbs');
-
-// Handlebars engine setup for views
-app.engine('handlebars', handlebars.engine());
-app.set('view engine', 'handlebars');
+// Set the view engine to Handlebars using exphbs
+app.engine("handlebars", handlebars.engine());
 app.set('views', config.viewsPath);
+app.set('view engine', 'handlebars');
 
 // Example route for rendering a chat view
 app.get('/chat', (req, res) => {
   res.render('chat.handlebars.hbs');
 });
-
-app.get('/api/products', (req, res) => {
-  const products = [/* Your product data here */];
-  res.render('products', { products });
-});
-
-
-app.engine('hbs', handlebars.engine({ extname: '.hbs' }));
-app.set('view engine', 'hbs');
 
 // API routes
 app.use(routerApp);

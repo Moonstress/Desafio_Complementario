@@ -28,7 +28,7 @@ Content-Type: application/json
 DELETE http://localhost:8080/api/users/{userId}
 
 # List All Products
-###
+### 
 GET http://localhost:8080/api/products
 
 # Get Product by ID (Replace :pid with a valid product ID)
@@ -93,8 +93,7 @@ Content-Type: application/json
 }
 
 
-
 #Remove Item from Cart (Replace :cid and :pid with valid cart and product IDs)
 ###
-DELETE http://localhost:8080/api/carts/:cid/products/:pid
+DELETE http://localhost:8080/api/carts/65303b64f28cfdef94e22fad/products/6525d4289abce8e5441d6b89
 

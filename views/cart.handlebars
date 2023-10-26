@@ -1,0 +1,12 @@
+<!-- cart_details.handlebars -->
+<h1>Cart Details</h1>
+<p>Cart ID: {{cart._id}}</p>
+<p>User: {{cart.user}}</p>
+<ul>
+  {{#each cart.products}}
+    <li>
+      <p>Product Title: {{this.title}}</p>
+      <p>Product Price: {{this.price}}</p>
+    </li>
+  {{/each}}
+</ul>

@@ -5,9 +5,9 @@ class ProductManagerMongo {
     this.model = Product;
   }
 
+ 
   async getProducts() {
-    try {
-      // Find all products in the database
+    try {      
       return await this.model.find({});
     } catch (error) {
       console.log(error);
@@ -50,3 +50,4 @@ class ProductManagerMongo {
 }
 
 export default ProductManagerMongo;
+ 
