@@ -5,12 +5,35 @@ import handlebars from 'express-handlebars';
 import cookieParser from 'cookie-parser';
 import { fileURLToPath } from 'url';
 import path from 'path';
-
+import jwt from 'jsonwebtoken'; 
 import { connectDb } from './src/config/config.js';
 import routerApp from "./src/routes/index.js";
 
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const jwt = require('jsonwebtoken');
+const express = require('express');
+
+const secretKey = '12345'; // Replace with a secure secret key
+app.get('/generate-token', (req, res) => {
+  const payload = { /* your payload data */ };
+  const token = jwt.sign(payload, secretKey, { expiresIn: '1m' });
+  res.json({ token });
+});
+
+app.get('/generate-token', (req, res) => {
+  const token = jwt.sign({ /* your payload data */ }, secretKey, { expiresIn: '1m' });
+  res.json({ token });
+});
+
+// Your other routes and configurations...
+
+app.listen(8080, () => {
+  console.log('Server is running on port 8080');
+});
+
 
 // Configuration settings
 const config = {
