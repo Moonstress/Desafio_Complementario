@@ -4,6 +4,26 @@ import UserManagerMongo from '../Dao/userManager.js';
 const router = Router();
 const userService = new UserManagerMongo();
 
+// GET all users with pagination
+usersRouter.get('/', async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+
+  try {
+    const users = await User.find()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
+    res.json({
+      status: 'success',
+      data: users,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 router.get('/', async (req, res) => {
   try {
     const users = await userService.getUsers();
